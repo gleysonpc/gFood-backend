@@ -30,8 +30,15 @@ export class AppGateway
 
   handleConnection(client: Socket) {
     const { userId } = client.handshake.query;
-    const user: ConnectedUser = { socketId: client.id, userId: Number(userId) };
-    this.users.push(user);
+    if (userId) {
+      const user: ConnectedUser = {
+        socketId: client.id,
+        userId: Number(userId),
+      };
+      this.users.push(user);
+    } else {
+      client.disconnect(true);
+    }
   }
 
   handleDisconnect(client: Socket) {
